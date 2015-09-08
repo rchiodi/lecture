@@ -25,14 +25,14 @@ innermost loop?)
 
 2. Now suppose that the cache is substantially larger than 16N, but
 substantially smaller than 8N^2. What is the AI now?
-2N*N flops / N*8 Bytes = AI of N/4
+2N*N flops / (N*8 Bytes) = AI of N/4
 
 
 3. Now suppose the cache is large enough to hold all of A, B, and C. What is the
 AI now? (Hint: Writing to a byte of memory not already in the cache incurs two
 memory transfers: one to move the data to the cache for writing, and one to move
 the written data back to main memory.)
-2N^3 flops/16N^2 Bytes = AI of N/8
+2N^3 flops/ (2*8*N^2 Bytes) = AI of N/8
 
 4. Cache overflowing. On my CPU (Intel i7-4700 HQ), L1, L2, and L3 caches are 32
 KB, 256 KB, and 6 MB respectively. What is the largest problem size N that will
