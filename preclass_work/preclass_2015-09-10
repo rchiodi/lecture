@@ -1,0 +1,27 @@
+1. Look up the specs for the totient nodes. Having read the Roofline paper,
+   draw a roofline diagram for one totient node (assuming only the
+   host cores are used, for the moment).  How do things change with
+   the addition of the two Phi boards?
+   Totient Node Specs: 59 GB/sec max bus speed, 614.4 GFlops/s Theoretical Peak
+   The roofline diagram can be seen in totient_roofline.png in this folder.
+   The Phi boards will move the ridge point to the left due to their high memory bandwidth
+   (320 GB/s) but lower theoretical peak Flops rate.
+
+2. What is the difference between two cores and one core with
+   hyperthreading?
+   One core with hyper threading will share a cache while two cores may have different caches.
+
+3. Do a Google search to find a picture of how memories are arranged
+   on the Phi architecture.  Describe the setup briefly in your own
+   words.  Is the memory access uniform or non-uniform?
+   The picture can be seen in Phiboard_mem.png.
+   The memory is non uniform with each coprocessor core having it’s own L2 cache.
+   All coprocessor can access the L2 cache’s located near separate coprocessors however.
+
+4. Consider the parallel dot product implementations suggested in the
+   slides.  As a function of the number of processors, the size of the
+   vectors, and typical time to send a message, can you predict the
+   speedup associated with parallelizing a dot product computation?
+   [Note that dot products have low arithmetic intensity -- the
+    roofline model may be useful for reasoning about the peak
+    performance for computing pieces of the dot product]
