@@ -1,0 +1,70 @@
+For the questions regarding the Game of Life, you may want to refer
+to the simple implementation included in the "life" subdirectory.
+If you run "make glider", you can see a small example of running
+the glider pattern for a few generations.
+
+0.  How much time did you spend on this pre-class exercise, and when?
+	Sunday night, 09/13/15.. So Far about an hour and a half.
+1.  What are one or two points that you found least clear in the
+    9/15 slide decks (including the narration)?
+	What is meant by better area/volume ratio?
+	
+
+2.  In the basic implementation provided, what size board for the Game
+    of Life would fit in L3 cache for one of the totient nodes?  Add a
+    timer to the code and run on the totient node.  How many cells per
+    second can we update for a board that fits in L3 cache?  For a
+    board that does not fit?
+    
+	The L3 cache on totient is 15 MB. 
+	Each cell uses an 8-bit char (1 byte), and two boards are kept.
+	This means 7,500,000 cells can be used. Which would lead to a 3872^2 board.
+	4 Cells would be ghost cells, meaning the usable board could be 1934^2 in size.
+	I can’t find out how to run on totient nodes with open-mp (which I was using for timing)
+	Error of not being able to find shared libraries.
+	Can run on head node fine though. Tried using PBS script from membench
+
+3.  Assuming that we want to advance time by several generations,
+    suggest a blocking strategy that would improve the operational
+    intensity of the basic implementation.  Assume the board is
+    not dilute, so that we must still consider every cell.  You may
+    want to try your hand at implementing your strategy (though you
+    need not spend too much time on it).
+	The domain could be split into different parts with ghost cells around each subdomain
+	At the beginning of each time step, communications would be done to update ghost cells
+	Then each subdomain would calculate only using information it has.
+	This would reduce the amount of memory needed for each processor, allowing the OI to increase.
+	This would be a distributed memory code.
+	
+
+4.  Comment on what would be required to parallelize this code
+    according to the domain decomposition strategy outlined in the
+    slides.  Do you think you would see good speedups on one of
+    the totient nodes?  Why or why not?
+	Good speed up would only occur if the problem size per processor could be reduced so that
+	the working set fit in the L2 (or lower) cache.
+
+5.  Suppose we want to compute long-range interactions between two
+    sets of particles in parallel using the obvious n^2 algorithm in a
+    shared-memory setting.  A naive implementation might look like
+
+      struct particle_t {
+          double x, y;
+          double fx, fy;
+      };
+
+      // Update p1 with forces from interaction with p2
+      void apply_forces(particle* p1, particle* p2);
+
+      // Assume p is the index of the current processor,
+      // part_idx[p] <= i < part_idx[p+1] is the range of
+      // particles "owned" by processor p.
+      //
+      for (int i = part_idx[p]; i < part_idx[p+1]; ++i)
+          for (int j = 0; j < npart; ++j)
+              apply_forces(particle + i, particle + j);
+
+    Based on what you know about memories and parallel architecture,
+    do you see any features of this approach that are likely to lead
+    to poor performance?
+	Since it’s shared memory and there is low OI here, all processors will be experiencing cache misses on 		the L3 cache (which they all share)
