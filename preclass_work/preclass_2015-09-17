@@ -5,6 +5,7 @@ than on the numerical analysis, but I am working under the assumption
 that you can figure out the numerical jargon.
 
 0.  How much time did you spend on this pre-class exercise, and when?
+	09/15/15 for 1.5 hours
 
 1.  What are one or two points that you found least clear in the
     9/17 slide decks (including the narration)?
@@ -25,6 +26,11 @@ that you can figure out the numerical jargon.
       void sparse_multiply(csr_t* A, double* x, double* result)
       {
           /* Fill in here */
+	  for(int i=0; i<A.n; ++i) {
+    	    for(int j=A.ptr[i];j<A.ptr[i+1]; ++j {
+	      result[i] += A.pr(A.col(j))*x(j);
+ 	    }
+	  }
       } 
 
 3.  From the slides, complete the following short code:
@@ -32,7 +38,7 @@ that you can figure out the numerical jargon.
       double laplacian_u(double (*u)(double x, double y),
                          double h, double x, double y)
       {
-          /* Estimate the Laplacian applied to u at (x,y) */
+	return (1/(h*h)*(4.0*u(x,y)-u(x-h/2.0,y)-u(x+h/2.0,y)-u(x,y-h/2.0)-u(x,y+h/2.0))
       }
 
     If you are unfamiliar with the syntax, the first argument to
@@ -61,3 +67,7 @@ that you can figure out the numerical jargon.
     several steps without communicating, can you describe how to
     similarly advance this scheme?  Are there any advantages to such
     an organization if there is only one core available?
+	This system could allow several steps without communicating if ghost cells were used.
+	The ghost cells would hold the value of the neighbors of the subdomain.
+	Having large enough ghost cells would allow several steps to be taken before updating.
+	The advantage of doing this with a single core would be if reducing the working set allowed it to fit in cache.
