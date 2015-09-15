@@ -22,7 +22,10 @@ the glider pattern for a few generations.
 	4 Cells would be ghost cells, meaning the usable board could be 1934^2 in size.
 	I can’t find out how to run on totient nodes with open-mp (which I was using for timing)
 	Error of not being able to find shared libraries.
-	Can run on head node fine though. Tried using PBS script from membench
+	Can run on head node fine though. Tried using PBS script from membench (used wrong compiler openmp tag)
+	In class, appears the code is bound by the processor speed, not memory bound.
+	Caused by use of characters, processors are not optimized to work quickly with characters.
+	
 
 3.  Assuming that we want to advance time by several generations,
     suggest a blocking strategy that would improve the operational
