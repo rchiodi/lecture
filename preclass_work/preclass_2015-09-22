@@ -14,7 +14,10 @@ Sunday, September 20, 2015 for 1 hour.
        terms of the number of trials (N), number of processors (p),
        time per trial (t_trial), and time to update the global
        counters in the critical section (t_update).
-	RT = N*(t_trial/p+p*t_update)
+	if b = batch size
+	Assumed t_trial is average time taken for each processor to do batch
+	Assumed t_update is cost for all processors to communicate
+	RT = N/p*(t_trial)+t_update*ceiling(N/B)
 
     b) Run the code with a few different parameter values in order
        to estimate N, t_trial, and t_update for this code on
